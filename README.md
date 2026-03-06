@@ -132,6 +132,118 @@ jobs:
 | **GitHub-hosted runner** | Managed by GitHub (Ubuntu, Windows, macOS) |
 | **Self-hosted runner**   | Your own server or machine                 |
 
+##### Matrix Strategy
+
+A matrix strategy lets you run multiple versions of a job with different configurations in parallel.
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [16, 18]
+
+    steps:
+      - run: echo "OS=${{ matrix.os }} Node=${{ matrix.node }}"
+```
+
+### `Avoid Duplication` of workflow logic in GitHub Actions
+
+There are `three` main approaches for reusing workflows or steps instead of copying/pasting code.
+
+1. Reusable Workflows - A reusable workflow is a full workflow that can be called by another workflow.
+2. Starter Workflows - Are like templates you can copy when creating a new workflow in your repository.
+3. Composite Actions - A composite action is like a mini action made up of multiple steps.
+
+#### 1. Reusable workflow example - `.github/workflows/build.yml`
+
+```bash
+name: Build Workflow
+
+on:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Building branch ${{ inputs.branch }}"
+```
+
+> **Caller workflow**
+
+```bash
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-build:
+    uses: ./.github/workflows/build.yml
+    with:
+      branch: main
+```
+
+#### 2. GitHub’s Node.js CI starter workflow
+
+```bash
+name: Node.js CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+```
+
+#### 3. Composite Actions - `.github/actions/deploy-action/action.yml`
+
+```bash
+name: "Deploy Action"
+description: "Deploy app to server"
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Building app"
+    - run: echo "Deploying to server"
+```
+
+> **Usage in a workflow**
+
+```bash
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/deploy-action
+```
+
+#### Quick Comparison
+
+| Feature               | Scope          | Reuse Type                  | Example                  |
+| --------------------- | -------------- | --------------------------- | ------------------------ |
+| **Reusable Workflow** | Whole workflow | Called from other workflows | CI → call build workflow |
+| **Starter Workflow**  | Template       | Copy to start new workflow  | Node.js CI template      |
+| **Composite Action**  | Steps          | Used as a single step       | Custom deploy steps      |
+
 ## With Regards, `Jakir`
 
 [![LinkedIn][linkedin-shield-jakir]][linkedin-url-jakir]
