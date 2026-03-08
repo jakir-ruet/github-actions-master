@@ -9,6 +9,67 @@ GitHub Actions is a automation (CI/CD) service by GitHub. It's automated all kin
 
  It lets you automate workflows like `testing code`, `building applications`, `deploying to servers`, `sending notifications`, and more — all triggered by GitHub events like `push`, `pull` `request`, `release`, etc.
 
+#### Actions Types
+
+1. **JavaScript Actions**
+
+- Written in JavaScript/Node.js.
+- Runs directly inside the runner.
+- Fast execution because it does not start a container.
+
+```bash
+uses: actions/checkout@v4
+```
+
+> Used for
+
+- Checking out code
+- Installing runtimes
+- Running scripts
+
+2. **Docker Container Actions**
+
+- Runs inside a Docker container.
+- Useful when the action requires a specific environment.
+
+```bash
+uses: docker://alpine:3.18
+```
+
+> Use cases
+
+- Security scanning
+- Custom build tools
+- Language environments
+
+3. **Composite Actions**
+
+- Combine multiple workflow steps into one reusable action.
+- Written in YAML.
+
+```bash
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Build project"
+    - run: echo "Run tests"
+```
+
+> Use cases
+
+- Reusable build steps
+- Standardized DevOps tasks
+
+**Summary**
+
+| Type              | Language   | Purpose                      |
+| ----------------- | ---------- | ---------------------------- |
+| JavaScript Action | Node.js    | Fast automation tasks        |
+| Docker Action     | Dockerfile | Custom environment execution |
+| Composite Action  | YAML       | Combine multiple steps       |
+| Reusable Workflow | YAML       | Share full workflow          |
+
+
 #### The `three` main building blocks in GitHub Actions are
 
 1. **[Workflows](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)**
