@@ -69,18 +69,19 @@ runs:
 | Composite Action  | YAML       | Combine multiple steps       |
 | Reusable Workflow | YAML       | Share full workflow          |
 
-
 #### The `three` main building blocks in GitHub Actions are
 
 1. **[Workflows](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)**
 2. **[Jobs](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)**
 3. **[Steps](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)**
 
-1. Workflows
-   A workflow is a set of automated processes that are triggered based on specific events in your GitHub repository. Common events include pushes to the repository, pull requests, or the creation of new issues.
-   - A workflow is a YAML file that defines what should happen (CI/CD logic).
-   - It lives in `.github/workflows/` in your repo.
-   - You can have multiple workflows for different purposes (`test`, `deploy`, `release`).
+**1. Workflows**
+
+A workflow is a set of automated processes that are triggered based on specific events in your GitHub repository. Common events include pushes to the repository, pull requests, or the creation of new issues.
+
+- A workflow is a YAML file that defines what should happen (CI/CD logic).
+- It lives in `.github/workflows/` in your repo.
+- You can have multiple workflows for different purposes (`test`, `deploy`, `release`).
 
 ```yaml
 name: Deploy Website
@@ -92,11 +93,13 @@ jobs:
       - run: echo "Deploying site..."
 ```
 
-2. Jobs
-   A job is a set of steps in a workflow that is executed on the same runner. Each step is either a shell script that will be executed, or an action that will be run.
-   - A job is a set of steps that run in the same runner (environment).
-   - Jobs can run in parallel or sequentially.
-   - Each job runs on its own VM or container.
+**2. Jobs**
+
+A job is a set of steps in a workflow that is executed on the same runner. Each step is either a shell script that will be executed, or an action that will be run.
+
+- A job is a set of steps that run in the same runner (environment).
+- Jobs can run in parallel or sequentially.
+- Each job runs on its own VM or container.
 
 ```yaml
 jobs:
@@ -106,9 +109,10 @@ jobs:
       - run: echo "This is a job"
 ```
 
-3. Steps
-   - Steps are individual tasks inside a job (`checkout code`, `run tests`).
-   - They can run commands or use actions (reusable pieces of code).
+**3. Steps**
+
+- Steps are individual tasks inside a job (`checkout code`, `run tests`).
+- They can run commands or use actions (reusable pieces of code).
 
 ```yaml
 steps:
